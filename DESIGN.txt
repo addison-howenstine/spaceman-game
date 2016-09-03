@@ -1,0 +1,17 @@
+DESIGN.txt
+
+SAVE MARK WATNEY!
+
+This game is a space and physics based game similar to Asteroids. You are an astronaut 
+floating in space with a limited supply of oxygen left in your suit. Your spacecraft is
+traveling at a random trajectory and velocity, and you need to get on board before you
+run out of oxygen. Use your arrow keys to rotate and accelerate forwards and backwards
+until you are able to lock on board with your spacecraft for five seconds—-or until 
+it's too late.
+
+Left and Right arrow keys rotate your position counterclockwise and clockwise, respectively,
+and forward and backward arrows accelerate you forward and backwards, respectively.
+
+There are two modes: beginner and advanced. In beginner mode there are no obstacles to
+keep you from reaching your spacecraft, but in advanced, there are asteroids that can, if
+they collide with the spacecraft or yourself, throw you off course.
