@@ -1,5 +1,7 @@
 package game;
 
+import java.net.URL;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -10,6 +12,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.input.KeyCode;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -27,11 +31,20 @@ public class Main extends Application{
 
 	private static Stage gameStage;
 
-
+	/* (non-Javadoc)
+	 * @see javafx.application.Application#start(javafx.stage.Stage)
+	 * TODO: ADD JAVADOC COMMENT FOR EVERY PUBLIC METHOD
+	 */
 	@Override
 	public void start (final Stage s) {
 		gameStage = s;
 		gameStage.setTitle("SAVE MARK WATNEY");
+
+		//	    final Media media = new Media(getClass().getClassLoader().getResourceAsStream("WorkTheProblem.mp3").toString());
+		//	    final MediaPlayer mediaPlayer = new MediaPlayer(media);
+		//	    mediaPlayer.play();
+
+
 		Group root = new Group();
 		Scene scene = new Scene(root, WIDTH, HEIGHT, Color.BLACK);
 		gameStage.setScene(scene);
@@ -39,7 +52,7 @@ public class Main extends Application{
 		gotoSplashScreen();
 		scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
 	}
-	
+
 	public static void gotoSplashScreen(){
 		SplashScreen splash = new SplashScreen();
 		Scene splashScene = splash.init(WIDTH, HEIGHT);
@@ -58,9 +71,9 @@ public class Main extends Application{
 		default:
 		}
 	}
-	
+
 	public static void startNewMarkWatneyGame(){
-		MarkWatneyGame myGame = new MarkWatneyGame();
+		MarkWatneyGameLevel1 myGame = new MarkWatneyGameLevel1();
 		Scene markScene = myGame.init(WIDTH, HEIGHT);
 		Timeline animation = new Timeline();
 		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
@@ -70,12 +83,12 @@ public class Main extends Application{
 		animation.play();
 		updateGameScreen(markScene);
 	}
-	
+
 	public static void updateGameScreen(Scene newScene){
 		gameStage.setScene(newScene);
 		gameStage.show();
 	}
-	
+
 	public static Stage getGameStage(){
 		return gameStage;
 	}
