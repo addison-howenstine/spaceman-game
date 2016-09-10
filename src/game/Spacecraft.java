@@ -1,7 +1,6 @@
 package game;
 
 import javafx.scene.image.Image;
-import javafx.stage.Screen;
 
 public class Spacecraft extends Satellite{
 	
@@ -12,7 +11,10 @@ public class Spacecraft extends Satellite{
 	private int angle0 = (int) (Math.random() * 360);
 
 
-	
+	/**
+	 * initializes new Spacecraft with random
+	 * position, angle, and velocity
+	 */
 	public Spacecraft(String n){
 		super();
 		setImage(new Image(getClass().getClassLoader().getResourceAsStream(FILE_NAME), IMAGE_DIMS,IMAGE_DIMS,true,true));

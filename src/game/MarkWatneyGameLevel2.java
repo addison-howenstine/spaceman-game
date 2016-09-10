@@ -9,22 +9,28 @@ import javafx.scene.input.KeyCode;
 
 public class MarkWatneyGameLevel2 extends MarkWatneyGame{
 
-	private Satellite satelliteToMove;
-
+	/**
+	 * Overrides MarkWatneyGame generic init
+	 * by calling super.init() and then giving
+	 * astro an initial velocity to make things
+	 * more interesting...
+	 */
 	public Scene init(int width, int height){
 		Scene scene = super.init(width, height);
-		satelliteToMove = getAstro();
 		getAstro().setYVel(-100);
 		return scene;
 	}
 
+	/**
+	 * Overrides MarkWatneyGame generic step
+	 * by calling super.init() and then calling
+	 * Level2 specific checks for winning
+	 * and losing (you can lose in Level2
+	 * 
+	 * destroys asteroids impacted by Spacecraft
+	 */
 	public void step(double elapsedTime, Timeline animation){
-		getAstro().move(elapsedTime);
-		getShuttle().move(elapsedTime);
-		for(Asteroid each: getAsteroidField()){
-			each.move(elapsedTime);
-		}
-		countDockTime();
+		super.step(elapsedTime, animation);
 		destroyOtherAsteroids(getShuttle(), DOCK_DISTANCE);
 		if(isWon())
 			showWinScreen(animation);
@@ -32,13 +38,21 @@ public class MarkWatneyGameLevel2 extends MarkWatneyGame{
 			showLoseScreen(animation);
 	}
 
+	/**
+	 * shows Level2 specific win screen,
+	 * stops animation from Level2
+	 */
 	private void showWinScreen(Timeline animation){
 		animation.stop();
-		Scene winScene = newScene("WinScreen.png");
+		Scene winScene = newScene("WinScreenLevel2.png");
 		winScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
 		Main.updateGameScreen(winScene);
 	}
 
+	/**
+	 * shows Level2 specific lose screen,
+	 * stops animation from Level2
+	 */
 	private void showLoseScreen(Timeline animation){
 		animation.stop();
 		Scene loseScene = newScene("LoseScreen.png");
@@ -46,31 +60,25 @@ public class MarkWatneyGameLevel2 extends MarkWatneyGame{
 		Main.updateGameScreen(loseScene);
 	}
 
+	/**
+	 * uses same handleKeyInput as super
+	 * but also adds commands for level
+	 * specific win, continue, and start
+	 */
 	public void handleKeyInput (KeyCode code){
+		super.handleKeyInput(code);
 		switch(code){
-		case RIGHT:
-			satelliteToMove.rotateCW();
-			break;
-		case LEFT:
-			satelliteToMove.rotateCCW();
-			break;
-		case UP:
-			satelliteToMove.accelerateFW();
-			break;
-		case DOWN:
-			satelliteToMove.accelerateBW();
-			break;
 		case SPACE:
-			if(satelliteToMove instanceof Astronaut){
-				satelliteToMove = getShuttle();
+			if(getSatelliteToMove() instanceof Astronaut){
+				setSatelliteToMove(getShuttle());
 			}
-			else if(satelliteToMove instanceof Spacecraft){
-				satelliteToMove = getAstro();
+			else if(getSatelliteToMove() instanceof Spacecraft){
+				setSatelliteToMove(getAstro());
 			}
 			break;
-			//		case W:
-			//			setWon(true);
-			//			break;
+		case W:
+			showWinScreen(getAnimation());
+			break;
 		case E:
 			Platform.exit();
 			break;
@@ -80,10 +88,19 @@ public class MarkWatneyGameLevel2 extends MarkWatneyGame{
 		}
 	}
 	
+	/** 
+	 * Overrides super's isWon to include
+	 * previous winning conditions and condition
+	 * that all asteroids have been destroyed
+	 */
 	public boolean isWon(){
 		return (super.isWon() && getAsteroidField().size() == 0);
 	}
 
+	/**
+	 * checks if loser has been killed
+	 * by passing asteroid
+	 */
 	private boolean isLost(){
 		boolean lost = false;
 		for(Asteroid eachA: getAsteroidField()){
@@ -94,6 +111,13 @@ public class MarkWatneyGameLevel2 extends MarkWatneyGame{
 		return lost;
 	}
 
+	/**
+	 * destroys any asteroid within
+	 * distToDestroy of sat passed in
+	 * 
+	 * @param sat
+	 * @param distToDestroy
+	 */
 	private void destroyOtherAsteroids(Satellite sat, double distToDestroy){
 		ArrayList<Asteroid> toDestroy = new ArrayList<Asteroid>();
 		for(Asteroid eachA: getAsteroidField()){
@@ -103,9 +127,7 @@ public class MarkWatneyGameLevel2 extends MarkWatneyGame{
 				toDestroy.add(eachA);
 			}
 		}
-		for(Asteroid eachA: toDestroy){
+		for(Asteroid eachA: toDestroy)
 			destroyAsteroid(eachA);
-		}
 	}
-
 }

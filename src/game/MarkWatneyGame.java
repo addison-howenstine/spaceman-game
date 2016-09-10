@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -18,9 +19,10 @@ public class MarkWatneyGame {
 	private Scene myScene;
 	private Astronaut astro;
 	private Spacecraft shuttle;
-	private double secondsDocked = 0;
-
+	private Satellite satelliteToMove;
 	private ArrayList<Asteroid> asteroidField = new ArrayList<Asteroid>();
+	private double secondsDocked = 0;
+	private Timeline currentAnimation;
 
 	public Scene getMyScene() {
 		return myScene;
@@ -40,6 +42,12 @@ public class MarkWatneyGame {
 	public void setShuttle(Spacecraft shuttle) {
 		this.shuttle = shuttle;
 	}
+	public Satellite getSatelliteToMove() {
+		return satelliteToMove;
+	}
+	public void setSatelliteToMove(Satellite satelliteToMove) {
+		this.satelliteToMove = satelliteToMove;
+	}
 	public double getSecondsDocked() {
 		return secondsDocked;
 	}
@@ -55,7 +63,17 @@ public class MarkWatneyGame {
 	public static double getWinTime() {
 		return WIN_TIME;
 	}
-	
+	public Timeline getAnimation(){
+		return currentAnimation;
+	}
+	public void setAnimation(Timeline animation){
+		currentAnimation = animation;
+	}
+
+	/**
+	 * initializes new scene for a generic
+	 * Level 1 or Level 2 MarkWatneyGame
+	 */
 	public Scene init (int width, int height) {
 		Group root = new Group();
 		setMyScene(new Scene(root, width, height, Color.BLACK));
@@ -64,7 +82,11 @@ public class MarkWatneyGame {
 		setShuttle(new Spacecraft("Endeavor"));
 		root.getChildren().add(getShuttle());
 		
-		for (int i = 0; i <= (int) (2 + Math.random()*3); i++){
+		satelliteToMove = getAstro();
+
+		// creates a random number of asteroids between 3 and 6
+		// new Asteroids can not be placed near current Astronaut
+		for (int i = 0; i <= (int) (3 + Math.random()*3); i++){
 			Asteroid a = new Asteroid();
 			if (a.distanceToOther(getAstro()) >= DOCK_DISTANCE *3){
 				root.getChildren().add(a);
@@ -76,23 +98,38 @@ public class MarkWatneyGame {
 		return getMyScene();
 	}
 
+	/**
+	 * move all pieces on the screen according
+	 * to their current positions and velocities
+	 */
+	public void step (double elapsedTime, Timeline animation) {
+		getAstro().move(elapsedTime);
+		getShuttle().move(elapsedTime);
+		setAnimation(animation);
+		for(Asteroid each: getAsteroidField()){
+			each.move(elapsedTime);
+		}
+		countDockTime();
+	}
+
+	/**
+	 * handle all keyboard inputs
+	 * that apply to any game level
+	 */
 	public void handleKeyInput (KeyCode code){
 		switch(code){
 		case RIGHT:
-			astro.rotateCW();
+			satelliteToMove.rotateCW();
 			break;
 		case LEFT:
-			astro.rotateCCW();
+			satelliteToMove.rotateCCW();
 			break;
 		case UP:
-			astro.accelerateFW();
+			satelliteToMove.accelerateFW();
 			break;
 		case DOWN:
-			astro.accelerateBW();
+			satelliteToMove.accelerateBW();
 			break;
-//		case W:
-//			won = true;
-//			break;
 		case E:
 			Platform.exit();
 			break;
@@ -102,11 +139,19 @@ public class MarkWatneyGame {
 		}
 	}
 
+	/**
+	 * check whether astro and shuttle 
+	 * are in within DOCK_DISTANCE of each other
+	 */
 	private boolean isDocked(){
 		double astroDist = astro.distanceToOther(shuttle);
 		return (astroDist <= DOCK_DISTANCE);
 	}
 
+	/**
+	 * update SecondsDocked based on whether
+	 * isDocked is true or false
+	 */
 	public void countDockTime(){
 		if (isDocked()){
 			secondsDocked += ( (double) 1 / Main.FRAMES_PER_SECOND);
@@ -118,19 +163,34 @@ public class MarkWatneyGame {
 		}
 	}
 
+	/**
+	 * returns true if astro has been
+	 * docked long enough to win
+	 */
 	public boolean isWon(){
-		return ( secondsDocked >= WIN_TIME);
-		}
-	
+		return (secondsDocked >= WIN_TIME);
+	}
+
+	/**
+	 * adds new Asteroid to asteroidField
+	 */
 	public Asteroid createNewAsteroid(){
 		Asteroid asteroid = new Asteroid();
 		asteroidField.add(asteroid);
 		return asteroid;
 	}
+	
+	/**
+	 * removes asteroid from asteroidField
+	 */
 	public void destroyAsteroid(Asteroid a){
 		asteroidField.remove(a);
 	}
-	
+
+	/**
+	 * generates a new Scene pulled from an
+	 * image file path name and returns new Scene
+	 */
 	public Scene newScene(String img){
 		Group root = new Group();
 		Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Color.BLACK);
@@ -139,6 +199,4 @@ public class MarkWatneyGame {
 		root.getChildren().add(imageView);
 		return scene;
 	}
-
-
 }

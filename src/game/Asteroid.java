@@ -15,6 +15,10 @@ public class Asteroid extends Satellite{
 
 
 	
+	/**
+	 * initializes new Asteroid
+	 * at random position and velocity
+	 */
 	public Asteroid(){
 		super();
 		setImage(new Image(getClass().getClassLoader().getResourceAsStream(FILE_NAME), IMAGE_DIMS,IMAGE_DIMS,true,true));
@@ -22,10 +26,14 @@ public class Asteroid extends Satellite{
 		setY(y);
 		setXVel((int) (Math.sin(Math.toRadians(angle0)) * initialVelocity));
 		setYVel((int) (Math.cos(Math.toRadians(angle0)) * initialVelocity));
-		setName("");
+		setName("Ceres");
 		setRotate(angle0);
 	}
 	
+	/**
+	 * replaces image of Asteroid with clear
+	 * image when Asteroid is destroyed
+	 */
 	public void goDark(){
 		setImage(darkImg);
 	}

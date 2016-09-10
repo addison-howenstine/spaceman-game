@@ -11,10 +11,25 @@ class Satellite extends ImageView{
 	public static final int ACCELERATION = 10;
 
 	
+	/**
+	 * constructor for Satellite calls
+	 * generic ImageView constructor
+	 * subclass constructors will build on this
+	 */
 	public Satellite(){
 		super();
 	}
 	
+	/**
+	 * constructs Satellite with initial positions,
+	 * velocities, rotation angle, and name
+	 * @param x
+	 * @param y
+	 * @param xv
+	 * @param yv
+	 * @param a
+	 * @param n
+	 */
 	public Satellite(int x, int y, int xv, int yv, int a, String n){
 		super();
 		setX(x - IMAGE_DIMS / 2);
@@ -31,7 +46,6 @@ class Satellite extends ImageView{
 	public int getYCenter(){
 		return (int) (getY() - IMAGE_DIMS / 2); 
 	}
-	
 	public int getXVel(){
 		return x_vel;
 	}
@@ -51,6 +65,15 @@ class Satellite extends ImageView{
 		name = n;
 	}
 	
+	/**
+	 * updates current position based on
+	 * velocity in each direction and time passed
+	 * 
+	 * includes conditions for if Satellite
+	 * is about to go off screen (comes out other end)
+	 * 
+	 * @param elapsedTime
+	 */
 	public void move(double elapsedTime){
 		setX(getX() + getXVel() * elapsedTime);
 		setY(getY() + getYVel() * elapsedTime);
@@ -84,6 +107,12 @@ class Satellite extends ImageView{
 		y_vel += ACCELERATION * Math.cos(Math.toRadians(getRotate()));
 	}
 	
+	/**
+	 * returns distance from this Satellite
+	 * to the other Satellite passed in
+	 * 
+	 * @param other
+	 */
 	public double distanceToOther(Satellite other){
 		return Math.sqrt( Math.pow( (this.getXCenter() - other.getXCenter()) ,2) +  
 				Math.pow((this.getYCenter() - other.getYCenter()) ,2) );

@@ -5,13 +5,15 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 public class SplashScreen {
 
 	private Scene myScene;
 	
+	/**
+	 * initializes a new SplashScreen to begin
+	 * a new MarkWatneyGame
+	 */
 	public Scene init (int width, int height) {
 		Group root = new Group();
 		myScene = new Scene(root, width, height, Color.BLACK);
