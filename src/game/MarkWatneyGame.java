@@ -2,27 +2,23 @@ package game;
 
 import java.util.ArrayList;
 
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 
 public class MarkWatneyGame {
 
-	private static final double DOCK_DISTANCE = Main.WIDTH / 13;
+	protected static final double DOCK_DISTANCE = Main.WIDTH / 13;
 	private static final double WIN_TIME = 5.0;
 
 	private Scene myScene;
 	private Astronaut astro;
 	private Spacecraft shuttle;
 	private double secondsDocked = 0;
-	private boolean won;
 
 	private ArrayList<Asteroid> asteroidField = new ArrayList<Asteroid>();
 
@@ -50,12 +46,6 @@ public class MarkWatneyGame {
 	public void setSecondsDocked(double secondsDocked) {
 		this.secondsDocked = secondsDocked;
 	}
-	public boolean isWon() {
-		return won;
-	}
-	public void setWon(boolean won) {
-		this.won = won;
-	}
 	public ArrayList<Asteroid> getAsteroidField() {
 		return asteroidField;
 	}
@@ -65,20 +55,25 @@ public class MarkWatneyGame {
 	public static double getWinTime() {
 		return WIN_TIME;
 	}
+	
+	public Scene init (int width, int height) {
+		Group root = new Group();
+		setMyScene(new Scene(root, width, height, Color.BLACK));
+		setAstro(new Astronaut("Addison"));
+		root.getChildren().add(getAstro());
+		setShuttle(new Spacecraft("Endeavor"));
+		root.getChildren().add(getShuttle());
+		
+		for (int i = 0; i <= (int) (2 + Math.random()*3); i++){
+			Asteroid a = new Asteroid();
+			if (a.distanceToOther(getAstro()) >= DOCK_DISTANCE *3){
+				root.getChildren().add(a);
+				asteroidField.add(a);
+			}
+		}
 
-	public void step (double elapsedTime, Timeline animation) {
-		astro.move(elapsedTime);
-		shuttle.move(elapsedTime);
-		for(Asteroid each: asteroidField){
-			each.move(elapsedTime);
-		}
-		countDockTime();
-		checkWin();
-		if(won){
-			won = false;
-			showWinScreen();
-			animation.stop();
-		}
+		getMyScene().setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+		return getMyScene();
 	}
 
 	public void handleKeyInput (KeyCode code){
@@ -95,9 +90,9 @@ public class MarkWatneyGame {
 		case DOWN:
 			astro.accelerateBW();
 			break;
-		case W:
-			won = true;
-			break;
+//		case W:
+//			won = true;
+//			break;
 		case E:
 			Platform.exit();
 			break;
@@ -112,7 +107,7 @@ public class MarkWatneyGame {
 		return (astroDist <= DOCK_DISTANCE);
 	}
 
-	private void countDockTime(){
+	public void countDockTime(){
 		if (isDocked()){
 			secondsDocked += ( (double) 1 / Main.FRAMES_PER_SECOND);
 			astro.highlight();
@@ -123,25 +118,27 @@ public class MarkWatneyGame {
 		}
 	}
 
-	private void checkWin(){
-		if( secondsDocked >= WIN_TIME){
-			setWon(true);
+	public boolean isWon(){
+		return ( secondsDocked >= WIN_TIME);
 		}
-	}
-
+	
 	public Asteroid createNewAsteroid(){
 		Asteroid asteroid = new Asteroid();
 		asteroidField.add(asteroid);
 		return asteroid;
 	}
-
-	private void showWinScreen(){
-		Group root = new Group();
-		Scene winScene = new Scene(root, Main.WIDTH, Main.HEIGHT, Color.BLACK);
-		Image winScreen = new Image(getClass().getClassLoader().getResourceAsStream("WinScreen.png"), Main.WIDTH, Main.HEIGHT,true,true);
-		ImageView winScreneImg = new ImageView(winScreen);
-		root.getChildren().add(winScreneImg);
-		winScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-		Main.updateGameScreen(winScene);
+	public void destroyAsteroid(Asteroid a){
+		asteroidField.remove(a);
 	}
+	
+	public Scene newScene(String img){
+		Group root = new Group();
+		Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT, Color.BLACK);
+		Image image = new Image(getClass().getClassLoader().getResourceAsStream(img), Main.WIDTH, Main.HEIGHT,true,true);
+		ImageView imageView = new ImageView(image);
+		root.getChildren().add(imageView);
+		return scene;
+	}
+
+
 }

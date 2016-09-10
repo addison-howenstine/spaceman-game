@@ -26,8 +26,8 @@ public class Main extends Application{
 	public static final int WIDTH = (int) (1.5 * HEIGHT);
 
 	public static final int FRAMES_PER_SECOND = 60;
-	private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-	private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+	public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+	public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
 	private static Stage gameStage;
 

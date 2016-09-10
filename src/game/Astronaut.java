@@ -26,10 +26,4 @@ public class Astronaut extends Satellite{
 	public void unHighlight(){
 		setImage(astroImage);
 	}
-
-	public double distanceToOther(Satellite other){
-		return Math.sqrt( Math.pow( (this.getXCenter() - other.getXCenter()) ,2) +  
-				Math.pow((this.getYCenter() - other.getYCenter()) ,2) );
-	}
-
 }

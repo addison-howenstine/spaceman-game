@@ -3,7 +3,7 @@ package game;
 import javafx.scene.image.ImageView;
 
 class Satellite extends ImageView{
-	private int x_vel, y_vel; //make this private instead
+	private int x_vel, y_vel;
 	private String name;
 	
 	public static final int IMAGE_DIMS = Main.WIDTH / 13;
@@ -84,5 +84,8 @@ class Satellite extends ImageView{
 		y_vel += ACCELERATION * Math.cos(Math.toRadians(getRotate()));
 	}
 	
-
+	public double distanceToOther(Satellite other){
+		return Math.sqrt( Math.pow( (this.getXCenter() - other.getXCenter()) ,2) +  
+				Math.pow((this.getYCenter() - other.getYCenter()) ,2) );
+	}
 }
