@@ -1,33 +1,26 @@
+// This entire file is part of my masterpiece.
+// Addison Howenstine
+
 package game;
 
-import javafx.scene.image.Image;
+import java.time.LocalDateTime;
 
 public class Asteroid extends Satellite{
 	
-	private static final String FILE_NAME = "asteroid.gif";
-	private static final String DARK_IMG = "dark.png";
-	private Image darkImg = new Image(getClass().getClassLoader().getResourceAsStream(DARK_IMG), IMAGE_DIMS,IMAGE_DIMS,true,true);
+	private static final String ASTEROID_FILE_NAME = "asteroid.gif";
+	private static final String ASTEROID_FILE_NAME_DARK = "dark.png";
 
-	private int x = (int) (Math.random() * Main.WIDTH);
-	private int y = (int) (Math.random() * Main.HEIGHT);
-	private int initialVelocity = 10 + (int) (Math.random() * 100);
-	private int angle0 = (int) (Math.random() * 360);
-
-
+	private int initialVelocity = 10 + (int) (Math.random() * 50);
 	
 	/**
 	 * initializes new Asteroid
 	 * at random position and velocity
+	 * with random name based on time stamp
 	 */
 	public Asteroid(){
 		super();
-		setImage(new Image(getClass().getClassLoader().getResourceAsStream(FILE_NAME), IMAGE_DIMS,IMAGE_DIMS,true,true));
-		setX(x);
-		setY(y);
-		setXVel((int) (Math.sin(Math.toRadians(angle0)) * initialVelocity));
-		setYVel((int) (Math.cos(Math.toRadians(angle0)) * initialVelocity));
-		setName("Ceres");
-		setRotate(angle0);
+		String name = "C" + LocalDateTime.now().toString();
+		setAllVals(randX, randY, initialVelocity, randAngle, name, ASTEROID_FILE_NAME);
 	}
 	
 	/**
@@ -35,6 +28,6 @@ public class Asteroid extends Satellite{
 	 * image when Asteroid is destroyed
 	 */
 	public void goDark(){
-		setImage(darkImg);
+		setImageFromFileName(ASTEROID_FILE_NAME_DARK);
 	}
 }

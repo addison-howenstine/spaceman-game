@@ -1,14 +1,12 @@
-package game;
+// This entire file is part of my masterpiece.
+// Addison Howenstine
 
-import javafx.scene.image.Image;
+package game;
 
 public class Spacecraft extends Satellite{
 	
-	private static final String FILE_NAME = "spacecraft.gif";
-	private int X = (int) (Math.random() * Main.WIDTH);
-	private int Y = (int) (Math.random() * Main.HEIGHT);
+	private static final String SPACECRAFT_FILE_NAME = "spacecraft.gif";
 	private int initialVelocity = 50 + (int) (Math.random() * 100);
-	private int angle0 = (int) (Math.random() * 360);
 
 
 	/**
@@ -17,12 +15,6 @@ public class Spacecraft extends Satellite{
 	 */
 	public Spacecraft(String n){
 		super();
-		setImage(new Image(getClass().getClassLoader().getResourceAsStream(FILE_NAME), IMAGE_DIMS,IMAGE_DIMS,true,true));
-		setX(X);
-		setY(Y);
-		setXVel((int) (Math.sin(Math.toRadians(angle0)) * initialVelocity));
-		setYVel((int) (- Math.cos(Math.toRadians(angle0)) * initialVelocity));
-		setName(n);
-		setRotate(angle0);
+		setAllVals(randX, randY, initialVelocity, randAngle, n, SPACECRAFT_FILE_NAME);
 	}
 }

@@ -1,17 +1,15 @@
-package game;
+// This entire file is part of my masterpiece.
+// Addison Howenstine
 
-import javafx.scene.image.Image;
+package game;
 
 public class Astronaut extends Satellite{
 
-	private static final String FILE_NAME = "astronaut.gif";
-	private static final String FILE_NAME_GLOW = "astronautGlow.png";
-	private Image astroImage = new Image(getClass().getClassLoader().getResourceAsStream(FILE_NAME), IMAGE_DIMS,IMAGE_DIMS,true,true);
-	private Image astroGlowImage = new Image(getClass().getClassLoader().getResourceAsStream(FILE_NAME_GLOW), IMAGE_DIMS,IMAGE_DIMS,true,true);
+	private static final String ASTRO_FILE_NAME = "astronaut.gif";
+	private static final String ASRO_FILE_NAME_GLOW = "astronautGlow.png";
 	private static final int X = Main.WIDTH /2;
 	private static final int Y = Main.HEIGHT /2;
-	private static final int X_V0 = 0;
-	private static final int Y_V0 = 0;
+	private static final int INITIAL_VELOCITY = 0;
 	private static final int ANGLE_0 = 0;
 
 	/**
@@ -19,8 +17,8 @@ public class Astronaut extends Satellite{
 	 * at center of the screen pointing straight up
 	 */
 	public Astronaut(String n){
-		super(X,Y,X_V0, Y_V0, ANGLE_0, n);
-		setImage(astroImage);
+		super();
+		setAllVals(X,Y, INITIAL_VELOCITY, ANGLE_0, n, ASTRO_FILE_NAME);
 	}
 
 	/**
@@ -28,7 +26,7 @@ public class Astronaut extends Satellite{
 	 * glowing yellow icon
 	 */
 	public void highlight(){
-		setImage(astroGlowImage);
+		setImageFromFileName(ASRO_FILE_NAME_GLOW);
 	}
 
 	/**
@@ -36,6 +34,6 @@ public class Astronaut extends Satellite{
 	 * regular white color icon
 	 */
 	public void unHighlight(){
-		setImage(astroImage);
+		setImageFromFileName(ASTRO_FILE_NAME);
 	}
 }

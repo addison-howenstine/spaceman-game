@@ -1,43 +1,46 @@
+// This entire file is part of my masterpiece.
+// Addison Howenstine
+
 package game;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 class Satellite extends ImageView{
-	private int x_vel, y_vel;
-	private String name;
-	
 	public static final int IMAGE_DIMS = Main.WIDTH / 13;
 	public static final int ROTATION_DEGREE = 5;
 	public static final int ACCELERATION = 10;
-
+	public static final int MARGIN_BUFFER = 10;
+	
+	protected int randX = (int) (Math.random() * Main.WIDTH);
+	protected int randY = (int) (Math.random() * Main.HEIGHT);
+	protected int randAngle = (int) (Math.random() * 360);
+	
+	private int x_vel, y_vel;
+	private String name;
 	
 	/**
 	 * constructor for Satellite calls
 	 * generic ImageView constructor
-	 * subclass constructors will build on this
+	 * subclass constructors will call
+	 * setAllVals to initialize Satellite parameters
 	 */
 	public Satellite(){
 		super();
 	}
 	
 	/**
-	 * constructs Satellite with initial positions,
-	 * velocities, rotation angle, and name
-	 * @param x
-	 * @param y
-	 * @param xv
-	 * @param yv
-	 * @param a
-	 * @param n
+	 * initializes all relevant values that
+	 * apply for any Satellite object
 	 */
-	public Satellite(int x, int y, int xv, int yv, int a, String n){
-		super();
+	public void setAllVals(int x, int y, int initialVelocity, int angle0, String n, String fileName){
 		setX(x - IMAGE_DIMS / 2);
 		setY(y - IMAGE_DIMS / 2);
-		setXVel(xv);
-		setYVel(yv);
-		setRotate(a);
-		setName("@Astro_" + n);
+		setXVel((int) (Math.sin(Math.toRadians(angle0)) * initialVelocity));
+		setYVel((int) (- Math.cos(Math.toRadians(angle0)) * initialVelocity));
+		setRotate(angle0);
+		setName(n);
+		setImageFromFileName(fileName);
 	}
 	
 	public int getXCenter(){
@@ -66,6 +69,16 @@ class Satellite extends ImageView{
 	}
 	
 	/**
+	 * sets image representation of satellite
+	 * to the image stored in a file and resized
+	 * to consistent dimensions IMAGE_DIMS
+	 */
+	public void setImageFromFileName(String fileName){
+		Image image = new Image(getClass().getClassLoader().getResourceAsStream(fileName), IMAGE_DIMS, IMAGE_DIMS,true,true);
+		setImage(image);
+	}
+	
+	/**
 	 * updates current position based on
 	 * velocity in each direction and time passed
 	 * 
@@ -79,16 +92,16 @@ class Satellite extends ImageView{
 		setY(getY() + getYVel() * elapsedTime);
 		
 		if (getX() <= 0){
-			setX(Main.WIDTH - 10);
+			setX(Main.WIDTH - MARGIN_BUFFER);
 		}
 		if (getX() >= Main.WIDTH){
-			setX(10);
+			setX(MARGIN_BUFFER);
 		}
 		if (getY() <= 0){
-			setY(Main.HEIGHT - 10);
+			setY(Main.HEIGHT - MARGIN_BUFFER);
 		}
 		if (getY() >= Main.HEIGHT){
-			setY(10);
+			setY(MARGIN_BUFFER);
 		}
 	}
 	
